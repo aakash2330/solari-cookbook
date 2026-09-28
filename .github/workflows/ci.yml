@@ -55,13 +55,25 @@ jobs:
             echo "::group::${dir}"
             (
               cd "$dir"
-              npm install --no-audit --no-fund
+              # --legacy-peer-deps: at least one example (browser-workers-cdp-ts,
+              # a Cloudflare Worker) has a real peer-dependency conflict between
+              # wrangler and @cloudflare/workers-types in its OWN package.json.
+              # That is pre-existing and none of this workflow's business to fix;
+              # loosening peer-dep resolution here only affects whether install
+              # succeeds for a typecheck, never what customers actually run.
+              npm install --no-audit --no-fund --legacy-peer-deps
               if [ -f tsconfig.json ]; then
                 npx --yes tsc --noEmit
               else
                 # No tsconfig in this example (most of them) — check every
                 # top-level .ts file directly with the same modern-module
                 # flags the SDK's own examples assume (top-level await).
+                # Most examples that reach for `process`/`node:fs` declare
+                # @types/node themselves; a few do not, and tsc has no other
+                # way to know Node's globals exist. Installing it here (never
+                # saved to package.json) makes the check independent of
+                # whether an individual example remembered to declare it.
+                npm install --no-audit --no-fund --no-save --legacy-peer-deps @types/node
                 npx --yes tsc --noEmit --skipLibCheck --moduleResolution node \
                   --module esnext --target es2022 --esModuleInterop *.ts
               fi
