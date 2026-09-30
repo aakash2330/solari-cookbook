@@ -14,7 +14,7 @@ Node 24, npm, and three keys.
 cd applications/docs-gif
 npm install
 cp .env.example .env       # then fill in the three keys below
-npm run snapshot           # build the app snapshot on Solari once, about a minute
+npm run snapshot           # build the app snapshot on Solari once
 npm run docs-generate      # record every page in docs/docs/how-to
 npm run dev                # app on :3000, docs on :3001, to see the GIFs in place
 ```
@@ -26,8 +26,7 @@ npm run dev                # app on :3000, docs on :3001, to see the GIFs in pla
 | `TYPESAFE_API_KEY` | The click agent, TypeSafe's Jev model | [console.typesafe.ai](https://console.typesafe.ai), Keys. No TypeSafe account? The gateway serves Jev too: in `pipeline/jev.ts` use `https://ai-gateway.vercel.sh/typesafe/v1/systemone`, the gateway key and model `typesafe-ai/jev` |
 
 The pipeline commands check their keys first and exit naming the missing one before
-anything is billed. No GIFs are checked in; the first run makes them: one sandbox, a fresh
-browser session per page, about a minute per page after a 40-second boot.
+anything is billed. No GIFs are checked in; the first run makes them.
 
 ```bash
 npm run docs-generate -- docs/docs/how-to/add-a-task.md   # one page
@@ -56,8 +55,7 @@ Open **Tweak the UI**, bottom right of the app on :3000. Move the Status filter 
 left, middle or right of the toolbar and press **Done**. That saves the layout, rewrites
 the sentence in the docs that says where the filter is, and runs `npm run docs-update`,
 which re-records only the pages git sees as changed. The panel shows each stage, then
-links to the re-recorded page. Its second row moves the Add Task button, which no page
-mentions, so moving only that makes Done report that nothing needed re-recording.
+links to the re-recorded page.
 
 The docs are the source of truth. `app/tweaks.json` only remembers the layout, and it
 is copied into the sandbox at the start of every run, so a moved control shows up in
@@ -74,16 +72,11 @@ exists to catch: a help page describing something the app no longer does.
 
 - `npm run snapshot` puts Node, `app/` and `pipeline/serve.ts` in a base sandbox,
   installs, starts the app on port 3000, snapshots it and kills it. Every run after
-  that boots from the snapshot in about half a minute and reaches the app through its
-  preview URL.
+  that boots from the snapshot and reaches the app through its preview URL.
 - For each page the pipeline creates a browser session, connects Playwright over CDP,
   sends the sandbox's preview token as a header so the browser is let in, and releases
   the session when the page is done. No session lives longer than one page takes.
 - Both are released in a `finally`, failed runs and Ctrl-C included.
-
-Two SDK details worth knowing: a sandbox from `create()` runs commands straight away,
-but `files.write` and `files.upload` need `await sbx.connect()` first. And the snapshot
-listing lags a few seconds behind a build.
 
 ## Layout
 
@@ -97,11 +90,3 @@ listing lags a few seconds behind a build.
 The planner, agent and checker know nothing about the demo app. The snapshot script
 does: it ships `app/` and starts `serve.ts`, so pointing this at another app means
 changing those two things and the docs folder.
-
-## Cost
-
-A full five-page run on 30 Sep 2026 took 3 min 52 s with one page retried: about four
-sandbox minutes, five browser sessions of under a minute each, 12 AI Gateway calls and
-13 TypeSafe clicks. At list price that is a few cents of Solari and about a cent of AI
-Gateway; TypeSafe is not metered here. `pipeline/model.ts` sets the model and the
-12-second spacing that keeps a free-tier gateway key under its rate limit.
