@@ -11,3 +11,5 @@ To see only the tasks that matter most, narrow the list to one priority.
 
 Every row in the table now shows the High priority, and a **Reset** button appears at
 the end of the filter row. Select it to bring the other tasks back.
+
+![Filter tasks by priority](/img/how-to/filter-by-priority/filter-tasks-by-priority.gif)

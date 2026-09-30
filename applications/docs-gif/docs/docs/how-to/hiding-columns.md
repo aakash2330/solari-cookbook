@@ -11,3 +11,5 @@ Columns you do not need can be switched off from the View menu.
 
 The Priority column disappears and the table shows only Task, Title and Status.
 Select **Priority** again in the same list to bring it back.
+
+![Hide a column](/img/how-to/hiding-columns/hide-a-column.gif)

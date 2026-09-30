@@ -11,3 +11,5 @@ Any column whose name carries a pair of small arrows can be sorted.
 
 The arrows beside Status become a single upward arrow, and every task in the Backlog
 moves to the top of the list. Choose **Desc** in the same menu to reverse it.
+
+![Sort tasks by status](/img/how-to/sorting-tasks/sort-tasks-by-status.gif)
