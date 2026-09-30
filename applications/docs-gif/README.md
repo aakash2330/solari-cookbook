@@ -105,5 +105,3 @@ sandbox minutes, five browser sessions of under a minute each, 12 AI Gateway cal
 13 TypeSafe clicks. At list price that is a few cents of Solari and about a cent of AI
 Gateway; TypeSafe is not metered here. `pipeline/model.ts` sets the model and the
 12-second spacing that keeps a free-tier gateway key under its rate limit.
-
-Built with Claude Code.

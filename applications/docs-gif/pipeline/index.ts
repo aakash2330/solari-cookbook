@@ -92,7 +92,6 @@ const steps: [string, (run: Run) => Promise<void>][] = [
 ];
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
-// <page>/<section>.gif, the same relative path in out/<run>/ and in the docs image folder.
 const key = (run: Run, g: Goal) => `${basename(run.file, ".md")}/${slug(g.title)}.gif`;
 const out = (run: Run, g: Goal) => `${RUN}/${key(run, g)}`;
 
@@ -102,7 +101,6 @@ async function record(run: Run, g: Goal) {
   const frames: Frame[] = [];
   g.trace = [];
   let i = 0;
-  // click-only loop; add a fill step here when a goal needs text input
   for (; i < MAX_STEPS; i++) {
     const { ref, label } = await nextClick(g.instruction || g.goal, await b.tree(), g.trace);
     log(`  ${g.title}: ${label}`);
